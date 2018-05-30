@@ -1,28 +1,42 @@
 import React, { Component } from 'react';
 import { Input, Button } from 'reactstrap';
 import { Link } from 'react-router-dom';
-import { updateNote, setHome } from '../REDUX/actions';
+import { setHome } from '../REDUX/actions';
 import { connect } from 'react-redux';
+import Axios from 'axios';
 
 class EditNote extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      title: props.location.state.note.title,
-      content: props.location.state.note.content
+      title: "",
+      content: "",
+      tags: [],
+      id: props.match.params.id,
+      requestOptions: { headers: { Authorization: localStorage.getItem('Authorization') } }
     };
   }
 
-  componentDidMount() { this.props.setHome(false) }
+  componentDidMount() { 
+    this.props.setHome(false) 
+    const { id, requestOptions } = this.state;
+    Axios
+      .get(`https://lambdanotes-jeffreyflynn.herokuapp.com/api/notes/${id}`, requestOptions)
+      .then(res => {
+        const { title, content, tags } = res.data;
+        this.setState({ title, content, tags })
+      })
+      .catch(err => console.log('error mounting note'))
+  }
 
-  stageUpdate = () => {
-    const { note } = this.props.location.state;
-    const updated = {
-      title: this.state.title,
-      content: this.state.content,
-      id: note.id
-    }
-    this.props.updateNote(updated);
+  updateNote = () => {
+    const { title, content, tags, id } = this.state;
+    const token = localStorage.getItem('Authorization')
+    const requestOptions = { headers: { Authorization: token } }
+    Axios
+      .put(`https://lambdanotes-jeffreyflynn.herokuapp.com/api/notes/${id}`, { title, content, tags }, requestOptions)
+      .then(res => this.props.history.push('/home'))
+      .catch(err => console.log('error updating note'))
   }
 
   render() {
@@ -47,13 +61,10 @@ class EditNote extends Component {
           onChange={event => this.setState({ [event.target.name]: event.target.value })}
         />
         <br/>
-        <Link to="/home" onClick={() => this.stageUpdate()}>
-          <Button className="Button col-3">Update</Button>
-        </Link>
+        <Button onClick={() => this.updateNote()} className="Button col-3">Update</Button>
       </div>
     )
   }
 }
 
-export default connect(null, { updateNote, setHome })(EditNote);
-// export default EditNote;
+export default connect(null, { setHome })(EditNote);

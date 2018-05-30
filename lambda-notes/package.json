@@ -5,6 +5,8 @@
   "dependencies": {
     "axios": "^0.18.0",
     "bootstrap": "^4.1.0",
+    "glamor": "^2.20.40",
+    "glamorous": "^4.13.0",
     "react": "^16.3.2",
     "react-animations": "^1.0.0",
     "react-csv": "^1.0.14",

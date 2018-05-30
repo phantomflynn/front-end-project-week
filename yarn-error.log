@@ -1,8 +1,8 @@
 Arguments: 
-  C:\Program Files\nodejs\node.exe C:\Users\jeffr\AppData\Roaming\npm\node_modules\yarn\bin\yarn.js statr
+  C:\Program Files\nodejs\node.exe C:\Users\jeffr\AppData\Roaming\npm\node_modules\yarn\bin\yarn.js start
 
 PATH: 
-  C:\Program Files\Git\mingw64\bin;C:\Program Files\Git\usr\bin;C:\Users\jeffr\bin;C:\ProgramData\Oracle\Java\javapath;C:\Program Files\Dell\DW WLAN Card;C:\Program Files (x86)\Intel\iCLS Client;C:\Program Files\Intel\iCLS Client;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\IPT;C:\Program Files\Intel\Intel(R) Management Engine Components\IPT;C:\Program Files\WIDCOMM\Bluetooth Software;C:\Program Files\WIDCOMM\Bluetooth Software\syswow64;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0;C:\Program Files (x86)\PharosSystems\Core;C:\Program Files (x86)\Skype\Phone;C:\Program Files\Git\cmd;C:\Program Files\Sublime Text 3;C:\Users\jeffr\AppData\Local\Programs\Python\Python36-32;C:\Program Files\nodejs;C:\Go\bin;C:\Users\jeffr\AppData\Local\Microsoft\WindowsApps;C:\Users\jeffr\AppData\Roaming\npm;C:\Users\jeffr\AppData\Local\atom\bin;C:\Program Files\Microsoft VS Code\bin
+  C:\Program Files\Git\mingw64\bin;C:\Program Files\Git\usr\bin;C:\Users\jeffr\bin;C:\ProgramData\Oracle\Java\javapath;C:\Program Files\Dell\DW WLAN Card;C:\Program Files (x86)\Intel\iCLS Client;C:\Program Files\Intel\iCLS Client;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\IPT;C:\Program Files\Intel\Intel(R) Management Engine Components\IPT;C:\Program Files\WIDCOMM\Bluetooth Software;C:\Program Files\WIDCOMM\Bluetooth Software\syswow64;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0;C:\Program Files (x86)\PharosSystems\Core;C:\Program Files (x86)\Skype\Phone;C:\Program Files\Git\cmd;C:\Program Files\Sublime Text 3;C:\Users\jeffr\AppData\Local\Programs\Python\Python36-32;C:\Go\bin;C:\Program Files\nodejs;C:\Users\jeffr\AppData\Local\Microsoft\WindowsApps;C:\Users\jeffr\AppData\Local\atom\bin;C:\Program Files\Microsoft VS Code\bin;C:\Users\jeffr\AppData\Roaming\npm
 
 Yarn version: 
   1.5.1
@@ -1839,14 +1839,17 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/yallist/-/yallist-3.0.2.tgz#8452b4bb7e83c7c188d8041c1a837c773d6d8bb9"
 
 Trace: 
-  Error: Command "statr" not found.
-      at new MessageError (C:\Users\jeffr\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:186:110)
-      at C:\Users\jeffr\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:87307:17
-      at Generator.next (<anonymous>)
-      at step (C:\Users\jeffr\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:98:30)
-      at C:\Users\jeffr\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:116:14
-      at new Promise (<anonymous>)
-      at new F (C:\Users\jeffr\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:23451:28)
-      at C:\Users\jeffr\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:95:12
-      at runCommand (C:\Users\jeffr\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:87312:22)
-      at Object.<anonymous> (C:\Users\jeffr\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:87412:14)
+  Error: Command failed.
+  Exit code: 1
+  Command: C:\WINDOWS\system32\cmd.exe
+  Arguments: /d /s /c node server.js
+  Directory: C:\Users\jeffr\Desktop\coding\LAMBDA\IMMERSIVE\Week8 - FrontEnd Project\front-end-project-week
+  Output:
+  
+      at ProcessTermError.MessageError (C:\Users\jeffr\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:186:110)
+      at new ProcessTermError (C:\Users\jeffr\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:226:113)
+      at ChildProcess.<anonymous> (C:\Users\jeffr\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:30281:17)
+      at emitTwo (events.js:126:13)
+      at ChildProcess.emit (events.js:214:7)
+      at maybeClose (internal/child_process.js:925:16)
+      at Process.ChildProcess._handle.onexit (internal/child_process.js:209:5)

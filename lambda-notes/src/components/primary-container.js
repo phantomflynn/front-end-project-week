@@ -1,23 +1,21 @@
 import React, { Component } from 'react';
 import { 
   Card, CardTitle, CardBody, CardFooter,
-  CardText, Col, Button, Dropdown, 
+  CardText, Col, Dropdown, 
   DropdownToggle, DropdownMenu, DropdownItem 
 } from 'reactstrap';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { getNotes, saveNote, handleReverse, handleOrder, sortTitle, setHome } from '../REDUX/actions';
-import { CardFactory } from './card-factory';
-import { ShowAt, HideAt } from 'react-with-breakpoints';
+import { getNotes, handleReverse, handleOrder, sortTitle, setHome } from '../REDUX/actions';
 import Dragula from 'dragula';
 import TagsInput from 'react-tagsinput';
-// import CardFactory from './card-factory';
-
+import axios from 'axios';
 
 class PrimaryContainer extends Component {
   constructor() {
     super();
     this.state = { 
+      activeUser: "",
       listView: false,
       listOptions: false,
       sortOptions: false,
@@ -28,7 +26,12 @@ class PrimaryContainer extends Component {
     }
   }
 
-  componentDidMount() { this.props.setHome(true) }
+  componentDidMount() { 
+    this.props.setHome(true)
+    const token = localStorage.getItem('Authorization')
+    const requestOptions = { headers: { Authorization: token } }
+    this.props.getNotes(requestOptions)
+  }
 
   dragulaDecorator = (componentBackingInstance) => {
     if (componentBackingInstance) {
@@ -46,10 +49,10 @@ class PrimaryContainer extends Component {
         lg={this.props.listView ? "12" : "6"} 
         xl={this.props.listView ? "12" : "4"} 
         className="NoteCard" 
-        key={note.id}
+        key={note._id}
       >
         <Card className="Card">
-          <Link to={{ pathname: `/viewnote/${note.id}`, state: { viewNote: {note} } }} className="CardLink">
+          <Link to={{ pathname: `/viewnote/${note._id}`, state: { viewNote: {note} } }} className="CardLink">
             <CardBody className="CardContent">
               <CardTitle className="CardTitle">{note.title}</CardTitle>
               <CardText className="CardText">
@@ -57,7 +60,7 @@ class PrimaryContainer extends Component {
               </CardText>
             </CardBody>
           </Link>
-          {note.tags.length > 0 ? (
+          {note.tags && note.tags.length > 0 ? (
             <CardFooter>
               <TagsInput 
                 value={note.tags} onChange={this.handleNewTag} 
@@ -103,7 +106,7 @@ class PrimaryContainer extends Component {
             className={!this.state.sortTitle && !this.state.sortOldest && !this.state.letsDrag ? "active" : ""}
           >Newest - Oldest</DropdownItem>
           <DropdownItem
-            onClick={() => this.setState({ letsDrag: true })}
+            onClick={() => this.setState({ letsDrag: true, defaultSort: false, sortOldest: false, sortTitle: false })}
             className={this.state.letsDrag ? "active" : ""}
           >Drag</DropdownItem>
         </DropdownMenu>
@@ -124,7 +127,6 @@ class PrimaryContainer extends Component {
 
         <div className="PrimaryContainer__cardContainer mx-0" ref={this.state.letsDrag ? this.dragulaDecorator : null}>
           {this.props.notes.map(note => this.cardFactory(note))}
-          {/* {this.props.notes.map(note => <CardFactory note={note} />)} */}
         </div>
 
       </div>
@@ -142,7 +144,6 @@ const mapStateToProps = state => ({
 
 export default connect(mapStateToProps, { 
   getNotes, 
-  saveNote,
   handleReverse, 
   handleOrder, 
   sortTitle ,

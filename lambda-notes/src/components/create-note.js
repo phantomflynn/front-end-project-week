@@ -1,26 +1,28 @@
 import React, { Component } from 'react';
 import { Input } from 'reactstrap';
 import { Link } from 'react-router-dom';
-import { saveNote, setHome } from '../REDUX/actions';
+import { setHome } from '../REDUX/actions';
 import { connect } from 'react-redux';
 import { Button, Collapse } from 'reactstrap';
 import Remarkable from 'remarkable';
+import Axios from 'axios';
 
 class NewNote extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      title: "",
-      content: "",
-      toggleMarkdown: false
-    };
+  state = {
+    title: "",
+    content: "",
+    requestOptions: { headers: { Authorization: localStorage.getItem('Authorization') } },
+    toggleMarkdown: false
   }
 
   componentDidMount() { this.props.setHome(false) }
 
   handleSaveNote = () => {
-    const newNote = { title: this.state.title, content: this.state.content, tags: [] };
-    this.props.saveNote(newNote);
+    const { title, content, requestOptions } = this.state;
+    Axios
+      .post("https://lambdanotes-jeffreyflynn.herokuapp.com/api/notes", { title, content }, requestOptions)
+      .then(note => this.props.history.push('/home'))
+      .catch(err => console.log('error creating new note'))
     this.setState({ title: "", content: "" });
   }
 
@@ -76,12 +78,10 @@ class NewNote extends Component {
             <div dangerouslySetInnerHTML={this.getRawMarkup()} className="output-text bg-dark text-white ContentInput mb-4"></div>
           </Collapse>
         </div>
-        <Link to="/home" onClick={() => this.handleSaveNote()}>
-          <Button className="Button col-3">Save</Button>
-        </Link>
+        <Button onClick={() => this.handleSaveNote()} className="Button col-3">Save</Button>
       </div>
     )
   }
 }
 
-export default connect(null, { saveNote, setHome })(NewNote);
+export default connect(null, { setHome })(NewNote);

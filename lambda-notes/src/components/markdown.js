@@ -51,5 +51,3 @@ class Markdown extends Component {
 }
 
 export default connect(null, { setHome })(Markdown);
-
-// export default Markdown;

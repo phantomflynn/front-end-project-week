@@ -1,42 +1,54 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
-import { Button, Nav, NavItem, Navbar, Tooltip,
-  NavbarBrand, NavbarToggler, Collapse, NavLink,
-  Dropdown, DropdownToggle, DropdownMenu, DropdownItem
-} from 'reactstrap';
+import { Link, withRouter } from 'react-router-dom';
 import { toggleNight, listViews, getNotes } from '../REDUX/actions';
 import { ShowAt, HideAt } from 'react-with-breakpoints';
 import styled from 'styled-components';
 import { CSVLink } from 'react-csv';
+import { 
+  Button, Nav, NavItem, Navbar, Tooltip,
+  Dropdown, DropdownToggle, DropdownMenu, 
+  DropdownItem, NavbarToggler, Collapse
+} from 'reactstrap';
 
 const Wrapper = styled.section`text-decoration-line: none; width: 100%;`;
 
 class NavColumn extends Component {
-  constructor() {
-    super();
-    this.state = { 
-      collapsed: true,
-      viewOpen: false,
-      isOpen: false,
-      exportOpen: false,
-      tooltipOpen: false
-    }
+  state = { 
+    collapsed: true,
+    viewOpen: false,
+    isOpen: false,
+    exportOpen: false,
+    tooltipOpen: false
   }
 
-  componentDidMount() { this.props.getNotes() }
-
   handleCSV = () => {
-    const headers = [ { label: "Note ID", key: "id" }, { label: "Title", key: "title" }, { label: "Content", key: "content" } ];
-    const data = this.props.notes.map(note => ({ id: note.id, title: note.title, content: note.content }));
+    const headers = [ 
+      { label: "Note ID", key: "id" }, 
+      { label: "Title", key: "title" }, 
+      { label: "Content", key: "content" },
+      { label: "Tags", key: "tags" }
+    ];
+    const data = this.props.notes.map(note => (
+      { id: note._id, title: note.title, content: note.content, tags: note.tags }
+    ));
     return (
       <CSVLink data={data} headers={headers} filename={"my-notes.csv"} id="CSV-Tooltip">
-        <Tooltip placement="right" isOpen={this.state.tooltipOpen} target="CSV-Tooltip" toggle={() => this.setState({ tooltipOpen: !this.state.tooltipOpen })}>
-          Mozilla Firefox is recommended.
-        </Tooltip>
+        <Tooltip 
+          placement="right" 
+          isOpen={this.state.tooltipOpen} 
+          target="CSV-Tooltip" 
+          toggle={() => this.setState({ tooltipOpen: !this.state.tooltipOpen })}
+        >Mozilla Firefox is recommended.</Tooltip>
         <Button className="Nav__ButtonsContainer--navButton px-0">Export Notes to CSV</Button>
       </CSVLink>
     )
+  }
+
+  handleLogout = () => {
+    localStorage.removeItem('Authorization')
+    this.props.history.push('/')
+    if (!this.state.collapsed) this.setState({ collapsed: true })
   }
 
   render() {
@@ -93,6 +105,9 @@ class NavColumn extends Component {
             <NavItem className="col-12 p-0">
               {this.handleCSV()}
             </NavItem>
+            <NavItem className="col-12 p-0">
+              <Button onClick={() => this.handleLogout()} className="Nav__ButtonsContainer--navButton px-0">Logout</Button>
+            </NavItem>
           </Nav>
         </HideAt>
         <ShowAt breakpoint="small">
@@ -110,10 +125,12 @@ class NavColumn extends Component {
                 <Link to="/markdown" className="p-0 NavRow__Link" onClick={() => this.setState({ collapsed: !this.state.collapsed })}>
                   <NavItem>Markdown Editor</NavItem>
                 </Link>
-                {/* <Link to="/markdown" className="p-0 NavRow__Link" onClick={() => this.setState({ collapsed: !this.state.collapsed })}> */}
                 <CSVLink data={data} headers={headers} filename={"my-notes.csv"} id="CSV-Tooltip" className="p-0 NavRow__Link">
                   <NavItem>Export Notes to CSV</NavItem>
                 </CSVLink>
+                <Link to="/" className="p-0 NavRow__Link" onClick={() => this.handleLogout()}>
+                  <NavItem>Logout</NavItem>
+                </Link>
               </Nav>
             </Collapse>
           </Navbar>
@@ -130,4 +147,4 @@ const mapStateToProps = state => ({
   isHome: state.isHome
 });
 
-export default connect(mapStateToProps, { toggleNight, listViews, getNotes })(NavColumn);
+export default connect(mapStateToProps, { toggleNight, listViews, getNotes })(withRouter(NavColumn));

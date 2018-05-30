@@ -1,8 +1,13 @@
 import {
-  FETCH_NOTES, FETCHING_ERROR, DELETED_NOTE, 
-  TOGGLE_NIGHT, REORDER, OLDEST_NEWEST, 
-  NEWEST_OLDEST, LIST, SORT_TITLE, NEW_USER,
-  SET_HOME, HANDLE_TAGS
+  FETCH_NOTES, 
+  FETCHING_ERROR, 
+  TOGGLE_NIGHT, 
+  REORDER, 
+  OLDEST_NEWEST, 
+  NEWEST_OLDEST, 
+  LIST, 
+  SORT_TITLE, 
+  SET_HOME
 } from '../actions';
 
 const initialState = {
@@ -11,6 +16,7 @@ const initialState = {
   listView: false,
   username: "",
   isHome: false,
+  fromNew: false,
   night: false
 };
 
@@ -28,12 +34,6 @@ export default (state = initialState, action) => {
         error: "We couldn't retrieve your notes!"
       }
 
-    case DELETED_NOTE:
-      return {
-        ...state,
-        notes: [...action.payload]
-      }
-
     case TOGGLE_NIGHT:
       return {
         ...state,
@@ -43,13 +43,15 @@ export default (state = initialState, action) => {
     case OLDEST_NEWEST: 
       return {
         ...state,
-        notes: [...state.notes].sort((a, b) => { return b.id - a.id })
+        notes: !state.fromNew ? [...state.notes].reverse() : [...state.notes],
+        fromNew: !state.fromNew
       }
 
     case NEWEST_OLDEST:
       return {
         ...state,
-        notes: [...state.notes].sort((a, b) => { return a.id - b.id })
+        notes: state.fromNew ? [...state.notes].reverse() : [...state.notes],
+        fromNew: !state.fromNew
       }
 
     case LIST:
@@ -67,32 +69,10 @@ export default (state = initialState, action) => {
         })
       }
 
-    case NEW_USER:
-      return {
-        ...state,
-        username: action.payload
-      }
-
     case SET_HOME:
       return {
         ...state,
         isHome: action.payload
-      }
-
-    case HANDLE_TAGS:
-      return {
-        ...state,
-        notes: [...state.notes].map(note => {
-          if (note.id == action.payload.id) {
-            note.tags = [...note.tags, ...action.payload.tags].reduce((acc, el, index) => {
-              if (!acc.includes(el)) acc.push(el);
-              return acc;
-            }, []);
-            return note;
-          } else {
-            return note;
-          }
-        })
       }
 
     default:

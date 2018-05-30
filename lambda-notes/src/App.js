@@ -8,7 +8,6 @@ import {
   ViewNote,
   EditNote,
   Markdown,
-  DragSort,
   Login
 } from './components';
 
@@ -20,7 +19,6 @@ class App extends Component {
         <div className="ScrollOverflow">
           <Route exact path="/" component={Login} />
           <Route path ="/home" component={PrimaryContainer} />
-          {/* <Route path="/home" component={DragSort} /> */}
           <Route path="/create" component={NewNote} />
           <Route path="/viewnote/:id" render={props => <ViewNote {...props} />} />
           <Route path="/edit/:id" render={props => <EditNote {...props} />} />
